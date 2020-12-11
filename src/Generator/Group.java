@@ -21,11 +21,11 @@ public class Group {
         return havings;
     }
 
-    public void addColumn(String colunname){
-        this.columns.add(new Column(colunname,false,null));
+    public void addColumn(String colunName){
+        this.columns.add(new Column(colunName,false,null));
     }
 
-    public void addHaving(String aggregate,String colunname,String oprator,String comparator){
-        this.havings.add(new Having(aggregate,colunname,oprator,comparator));
+    public void addHaving(String aggregate,String colunName,String oprator,String comparator){
+        this.havings.add(new Having(aggregate,colunName,oprator,comparator));
     }
 }

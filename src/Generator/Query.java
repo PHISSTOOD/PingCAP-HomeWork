@@ -4,6 +4,9 @@ package Generator;
 import java.util.ArrayList;
 import java.util.List;
 
+/*
+ Generate a Query SQL
+ */
 public class Query {
 
     private String sql;
@@ -15,10 +18,12 @@ public class Query {
     private Group group;
     private List<Order> orderBy;
     private int limit;
+
     private static final String NEW_LINE = System.getProperty("line.separator");
 
 
     public Query() {
+        this.distinct = false;
         this.columns = new ArrayList();
         this.tables = new ArrayList();
         this.joins = new ArrayList();
@@ -28,6 +33,12 @@ public class Query {
         this.limit = -1;
         this.sql = "";
 
+    }
+
+    // Some operations initializing the attributes of a query sql, like set SELECT, FROM, JOIN, GROUP BY...
+    public Query setDistinct(boolean distinct){
+        this.distinct = distinct;
+        return this;
     }
 
     public Query addColumn(String columnName){
@@ -135,13 +146,22 @@ public class Query {
         return this;
     }
 
+    /*
+     Generate the query sql sentence.
+     Because in a query sql, the sequence is:
+     SELECT -> FROM -> (WHERE) -> (GROUP BY) -> (HAVING) -> (ORDER BY) those clauses in () means they are unnecessary.
+     The sequence of the implementation of generating is accord with this sequence.
+     */
     public String generate(){
         StringBuilder stringBuilder = new StringBuilder();
+
+        // Add SELECT at the beginning of sql, and add DISTINCT if it has been set.
         stringBuilder.append("SELECT ");
         if(this.distinct){
             stringBuilder.append("DISTINCT ");
         }
 
+        // Add those columns which want to be selected.
         String columnStatement = columnArrayToString(this.columns);
         if(columnStatement != null && !"".equals(columnStatement)){
             stringBuilder.append(columnStatement);
@@ -149,47 +169,60 @@ public class Query {
             stringBuilder.append("* ");
         }
 
+        // Add FROM, tables, join.
         String tableStatement = tableArrayToString(this.tables);
         if(tableStatement != null && !"".equals(tableStatement)){
-            stringBuilder.append(" FROM ");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("FROM ");
             stringBuilder.append(tableStatement);
         }else{
             throw new IllegalArgumentException("table name is null");
         }
-
         String joinStatement = joinArrayToString(joins);
         if(joinStatement != null && !"".equals(joinStatement)){
             stringBuilder.append(joinStatement);
         }
 
+        // Add WHERE and its conditions. If there is no conditions add "WHERE 1 = 1".
         String conditionStatement = whereConditionArrayToString(this.whereConditions);
         if(conditionStatement != null && !"".equals(conditionStatement)){
-            stringBuilder.append(" WHERE ");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("WHERE ");
             stringBuilder.append(conditionStatement);
         }else{
-            stringBuilder.append(" WHERE 1 = 1");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("WHERE 1 = 1");
         }
 
+        // Add GROUP BY and HAVING
         if(this.group.getColumns().size()>0){
-            stringBuilder.append(" GROUP BY ");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("GROUP BY ");
             String groupByStatement = groupByPrinter(group);
             stringBuilder.append(groupByStatement);
         }
 
+        // Realize ORDER BY.
         String orderByStatement = orderArrayToString(this.orderBy);
         if(this.orderBy != null && !"".equals(orderByStatement)){
-            stringBuilder.append(" ORDER BY ");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("ORDER BY ");
             stringBuilder.append(orderByStatement);
         }
 
+        // Add limit if user set a limitation > 0.
         if(this.limit>0){
-            stringBuilder.append(" LIMIT " + this.limit);
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("LIMIT " + this.limit);
         }
 
         this.sql = stringBuilder.toString();
         return sql;
     }
 
+    /*
+     Convert the list of columns which should be added after SELECT to a String.
+     */
     private String columnArrayToString(List<Column> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = ", ";
@@ -207,6 +240,9 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
+    /*
+     Convert the list of tables which should be added after FROM to a String.
+     */
     private String tableArrayToString(List<Table> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = ", ";
@@ -219,6 +255,9 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
+    /*
+     Convert the lists of joins which should be added after table to a String.
+     */
     private String joinArrayToString(List<Join> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = " ";
@@ -241,6 +280,9 @@ public class Query {
         return stringBuilder.toString();
     }
 
+    /*
+     Convert the list of conditions which should be added after WHERE to a String.
+     */
     private String whereConditionArrayToString(List<Condition> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = " AND ";
@@ -267,6 +309,9 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
+    /*
+     Convert a GROUP BY to a String.
+     */
     private String groupByPrinter(Group group){
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0;i<this.group.getColumns().size();i++){
@@ -276,7 +321,8 @@ public class Query {
             }
         }
         if(group.getHavings().size()!=0){
-            stringBuilder.append(" HAVING ");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append("HAVING ");
             for(int i = 0;i<this.group.getHavings().size();i++){
                 stringBuilder.append(havingPrinter(group.getHavings().get(i)));
                 if(i!=group.getColumns().size()-1){
@@ -287,6 +333,9 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
+    /*
+     Convert the list of order which should be added after WHERE to a String.
+     */
     private String orderArrayToString(List<Order> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = ",";
@@ -305,7 +354,7 @@ public class Query {
     private String tablePrinter(Table table){
         StringBuilder stringBuilder = new StringBuilder();
         if(table.getGeneratedBySQL()){
-            stringBuilder.append("(" + table.getTableName() + ") ");
+            stringBuilder.append("(" + table.getTableName().replace(NEW_LINE,"") + ") ");
             stringBuilder.append(table.getTableCode());
         }else{
             stringBuilder.append(table.getTableName());
@@ -335,6 +384,9 @@ public class Query {
         return stringBuilder.toString();
     }
 
+    /*
+     Check the joinType user type is legal or illegal
+     */
     private boolean checkJoinType(String joinType){
         if(joinType.toUpperCase().equals("JOIN") || joinType.toUpperCase().equals("INNER JOIN") || joinType.toUpperCase().equals("LEFT JOIN")
         || joinType.toUpperCase().equals("RIGHT JOIN") || joinType.toUpperCase().equals("LEFT OUTER JOIN") || joinType.toUpperCase().equals("RIGHT OUTER JOIN")
@@ -344,6 +396,9 @@ public class Query {
         return false;
     }
 
+    /*
+     Check the orderType user type is legal or illegal
+     */
     private boolean checkOrderType(String orderType){
         if(orderType.toUpperCase().equals("ASC") || orderType.toUpperCase().equals("DESC")){
             return true;
