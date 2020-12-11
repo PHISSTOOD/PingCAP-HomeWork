@@ -6,16 +6,16 @@ public class Join {
     private On on;
     private String using;
 
-    public Join(String joinType, Table table, On on) {
+    public Join(String joinType, String tableName, String tableCode, String cond1, String cond2, String operator) {
         this.joinType = joinType;
-        this.table = table;
-        this.on = on;
+        this.table = new Table(tableName,tableCode,false);
+        this.on = new On(cond1,cond2,operator);
         this.using = null;
     }
 
-    public Join(String joinType, Table table, String using) {
+    public Join(String joinType, String tableName, String tableCode, String using) {
         this.joinType = joinType;
-        this.table = table;
+        this.table = new Table(tableName,tableCode,false);
         this.on = null;
         this.using = using;
     }

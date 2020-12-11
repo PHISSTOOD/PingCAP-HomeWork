@@ -22,7 +22,7 @@ public class Group {
     }
 
     public void addColumn(String colunname){
-        this.columns.add(new Column(colunname));
+        this.columns.add(new Column(colunname,false,null));
     }
 
     public void addHaving(String aggregate,String colunname,String oprator,String comparator){

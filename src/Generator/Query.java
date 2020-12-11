@@ -31,7 +31,19 @@ public class Query {
     }
 
     public Query addColumn(String columnName){
-        Column column = new Column(columnName);
+        Column column = new Column(columnName, false, null);
+        columns.add(column);
+        return this;
+    }
+
+    public Query addColumn(String columnName, String columnCode){
+        Column column = new Column(columnName, false, columnCode);
+        columns.add(column);
+        return this;
+    }
+
+    public Query addColumn(String columnName, boolean as, String columnCode){
+        Column column = new Column(columnName, as, columnCode);
         columns.add(column);
         return this;
     }
@@ -60,20 +72,23 @@ public class Query {
         return this;
     }
 
-    public Query addJoin(String joinType,Table table,On on){
-        Join join = new Join(joinType,table,on);
+    public Query addJoin(String joinType,String tableName, String tableCode, String cond1, String cond2, String operator){
+        if(!checkJoinType(joinType)){
+            throw new IllegalArgumentException("illegal join type");
+        }
+        Join join = new Join(joinType,tableName,tableCode,cond1,cond2,operator);
         this.joins.add(join);
         return this;
     }
 
-    public Query addJoin(String joinType,Table table,String using){
-        Join join = new Join(joinType,table,using);
+    public Query addJoin(String joinType,String tableName, String tableCode,String using){
+        Join join = new Join(joinType,tableName,tableCode,using);
         this.joins.add(join);
         return this;
     }
 
-    public Query addJoin(String joinType,Table table){
-        Join join = new Join(joinType, table, (String)null);
+    public Query addJoin(String joinType,String tableName, String tableCode ){
+        Join join = new Join(joinType, tableName,tableCode, (String)null);
         this.joins.add(join);
         return this;
     }
@@ -95,12 +110,15 @@ public class Query {
         return this;
     }
 
-    public Query addHaving(String aggregate,String colunname,String oprator,String comparator){
-        this.group.addHaving(aggregate,colunname,oprator,comparator);
+    public Query addHaving(String aggregate,String colunName,String oprator,String comparator){
+        this.group.addHaving(aggregate,colunName,oprator,comparator);
         return this;
     }
 
     public Query addOrderBy(String orderName, String orderType) {
+        if(!checkOrderType(orderType)){
+            throw new IllegalArgumentException("illegal order type");
+        }
         Order order = new Order(orderName,orderType);
         orderBy.add(order);
         return this;
@@ -168,14 +186,20 @@ public class Query {
             stringBuilder.append(" LIMIT " + this.limit);
         }
 
-        return stringBuilder.toString();
+        this.sql = stringBuilder.toString();
+        return sql;
     }
 
-    public String columnArrayToString(List<Column> list) {
+    private String columnArrayToString(List<Column> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = ", ";
         for(int i = 0;i<list.size();i++){
             stringBuilder.append(list.get(i).getColumnName());
+            if(list.get(i).isAs()){
+                stringBuilder.append(" AS " + list.get(i).getColumnCode());
+            }else if(list.get(i).getColumnCode()!=null){
+                stringBuilder.append(" " + list.get(i).getColumnCode());
+            }
             if(i!=list.size()-1){
                 stringBuilder.append(separator);
             }
@@ -183,20 +207,11 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
-    public String tableArrayToString(List<Table> list) {
+    private String tableArrayToString(List<Table> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = ", ";
         for(int i = 0;i<list.size();i++){
-            if(list.get(i).getGeneratedBySQL()){
-                stringBuilder.append("(" + list.get(i).getTableName() + ") ");
-                stringBuilder.append(list.get(i).getTableCode());
-            }else{
-                stringBuilder.append(list.get(i).getTableName());
-                if(list.get(i).getTableCode()!=null){
-                    stringBuilder.append(" ");
-                    stringBuilder.append(list.get(i).getTableCode());
-                }
-            }
+            stringBuilder.append(tablePrinter(list.get(i)));
             if(i!=list.size()-1){
                 stringBuilder.append(separator);
             }
@@ -204,7 +219,7 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
-    public String joinArrayToString(List<Join> list) {
+    private String joinArrayToString(List<Join> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = " ";
         for(int i = 0;i<list.size();i++){
@@ -223,10 +238,10 @@ public class Query {
                 stringBuilder.append(separator);
             }
         }
-        return stringBuilder.toString().trim();
+        return stringBuilder.toString();
     }
 
-    public String whereConditionArrayToString(List<Condition> list) {
+    private String whereConditionArrayToString(List<Condition> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = " AND ";
         for(int i = 0;i<list.size();i++){
@@ -252,7 +267,7 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
-    public String groupByPrinter(Group group){
+    private String groupByPrinter(Group group){
         StringBuilder stringBuilder = new StringBuilder();
         for(int i = 0;i<this.group.getColumns().size();i++){
             stringBuilder.append(group.getColumns().get(i).getColumnName());
@@ -272,7 +287,7 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
-    public String orderArrayToString(List<Order> list) {
+    private String orderArrayToString(List<Order> list) {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = ",";
         for(int i = 0;i<list.size();i++){
@@ -287,7 +302,22 @@ public class Query {
         return stringBuilder.toString().trim();
     }
 
-    public String onPrinter(On on){
+    private String tablePrinter(Table table){
+        StringBuilder stringBuilder = new StringBuilder();
+        if(table.getGeneratedBySQL()){
+            stringBuilder.append("(" + table.getTableName() + ") ");
+            stringBuilder.append(table.getTableCode());
+        }else{
+            stringBuilder.append(table.getTableName());
+            if(table.getTableCode()!=null){
+                stringBuilder.append(" ");
+                stringBuilder.append(table.getTableCode());
+            }
+        }
+        return stringBuilder.toString();
+    }
+
+    private String onPrinter(On on){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(" ON ");
         stringBuilder.append(on.getCond1());
@@ -296,7 +326,7 @@ public class Query {
         return stringBuilder.toString();
     }
 
-    public String havingPrinter(Having having){
+    private String havingPrinter(Having having){
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(having.getAggregate());
         stringBuilder.append("(" + having.getColumn() + ")");
@@ -305,4 +335,19 @@ public class Query {
         return stringBuilder.toString();
     }
 
+    private boolean checkJoinType(String joinType){
+        if(joinType.toUpperCase().equals("JOIN") || joinType.toUpperCase().equals("INNER JOIN") || joinType.toUpperCase().equals("LEFT JOIN")
+        || joinType.toUpperCase().equals("RIGHT JOIN") || joinType.toUpperCase().equals("LEFT OUTER JOIN") || joinType.toUpperCase().equals("RIGHT OUTER JOIN")
+        || joinType.toUpperCase().equals("FULL JOIN") || joinType.toUpperCase().equals("FULL OUTER JOIN")){
+            return true;
+        }
+        return false;
+    }
+
+    private boolean checkOrderType(String orderType){
+        if(orderType.toUpperCase().equals("ASC") || orderType.toUpperCase().equals("DESC")){
+            return true;
+        }
+        return false;
+    }
 }
