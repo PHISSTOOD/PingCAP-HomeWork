@@ -1,11 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ab5808e4-b8c7-4538-8b92-034f37b599b1" name="Default Changelist" comment="" />
+    <list default="true" id="ab5808e4-b8c7-4538-8b92-034f37b599b1" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/Group.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/Having.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/Join.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/JoinType.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/On.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/Order.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Generator/OrderType.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Generator/Column.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Generator/Column.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Generator/Query.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Generator/Query.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Generator/QueryGenerator.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Generator/Table.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Generator/Table.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Test.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DatabaseView">
+    <option name="SHOW_INTERMEDIATE" value="true" />
+    <option name="GROUP_DATA_SOURCES" value="true" />
+    <option name="GROUP_SCHEMA" value="true" />
+    <option name="GROUP_CONTENTS" value="false" />
+    <option name="SORT_POSITIONED" value="false" />
+    <option name="SHOW_EMPTY_GROUPS" value="false" />
+    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
+    <option name="HIDDEN_KINDS">
+      <set />
+    </option>
+    <expand />
+    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -13,6 +42,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="generalSettings">
@@ -22,18 +54,36 @@
     </option>
   </component>
   <component name="ProjectId" id="1lSKGcQuC1cFmkV8emWeWj6BCDb" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
-    <property name="settings.editor.selected.configurable" value="MavenSettings" />
+    <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
+  </component>
+  <component name="RunManager">
+    <configuration name="Test" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Test" />
+      <module name="PingCAP Homework" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.Test" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SvnConfiguration">
     <configuration />
@@ -46,6 +96,8 @@
       <option name="presentableId" value="Default" />
       <updated>1607584957977</updated>
       <workItem from="1607584962717" duration="6528000" />
+      <workItem from="1607599838685" duration="368000" />
+      <workItem from="1607609061361" duration="12582000" />
     </task>
     <servers />
   </component>
@@ -57,13 +109,41 @@
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="240" y="65" key="#Project_Structure/0.0.1280.800@0.0.1280.800" timestamp="1607584971571" />
-    <state x="453" y="91" key="#com.intellij.ide.util.MemberChooser" timestamp="1607597697527">
+    <state x="453" y="91" key="#com.intellij.ide.util.MemberChooser" timestamp="1607676434599">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
-    <state x="453" y="91" key="#com.intellij.ide.util.MemberChooser/0.0.1280.800@0.0.1280.800" timestamp="1607597697527" />
+    <state x="453" y="91" key="#com.intellij.ide.util.MemberChooser/0.0.1280.800@0.0.1280.800" timestamp="1607676434599" />
+    <state width="1238" height="212" key="GridCell.Tab.0.bottom" timestamp="1607679654072">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="212" key="GridCell.Tab.0.bottom/0.0.1280.800@0.0.1280.800" timestamp="1607679654072" />
+    <state width="1238" height="212" key="GridCell.Tab.0.center" timestamp="1607679654070">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="212" key="GridCell.Tab.0.center/0.0.1280.800@0.0.1280.800" timestamp="1607679654070" />
+    <state width="1238" height="212" key="GridCell.Tab.0.left" timestamp="1607679654069">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="212" key="GridCell.Tab.0.left/0.0.1280.800@0.0.1280.800" timestamp="1607679654069" />
+    <state width="1238" height="212" key="GridCell.Tab.0.right" timestamp="1607679654071">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state width="1238" height="212" key="GridCell.Tab.0.right/0.0.1280.800@0.0.1280.800" timestamp="1607679654071" />
+    <state x="141" y="39" key="SettingsEditor" timestamp="1607662054506">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="141" y="39" key="SettingsEditor/0.0.1280.800@0.0.1280.800" timestamp="1607662054506" />
+    <state x="317" y="232" key="com.intellij.ide.util.TipDialog" timestamp="1607612039384">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="317" y="232" key="com.intellij.ide.util.TipDialog/0.0.1280.800@0.0.1280.800" timestamp="1607612039384" />
     <state x="298" y="157" width="683" height="486" key="find.popup" timestamp="1607595471042">
       <screen x="0" y="0" width="1280" height="800" />
     </state>
     <state x="298" y="157" width="683" height="486" key="find.popup/0.0.1280.800@0.0.1280.800" timestamp="1607595471042" />
+    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup" timestamp="1607614236186">
+      <screen x="0" y="0" width="1280" height="800" />
+    </state>
+    <state x="305" y="124" width="670" height="676" key="search.everywhere.popup/0.0.1280.800@0.0.1280.800" timestamp="1607614236186" />
   </component>
 </project>

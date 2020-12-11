@@ -12,11 +12,6 @@ public class Table {
         this.isGeneratedBySQL = isGeneratedBySQL;
     }
 
-    public Table(String tableName, boolean isGeneratedBySQL){
-        this.tableName = tableName;
-        this.isGeneratedBySQL = isGeneratedBySQL;
-    }
-
     public String getTableName() {
         return tableName;
     }
