@@ -1,8 +1,17 @@
+package test;
+
+import Distribute.Executor;
 import Generator.Query;
+import test.Init.CreateQuery;
+
+import java.sql.*;
+import java.util.Scanner;
+
 
 public class Test {
 
-    public static void main(String args[]){
+
+    public static void main(String args[]) throws SQLException {
         Query query1 = new Query().addColumn("c.country_name").addTable("PERSON","p")
                 .addTable("COUNTRY","c").addWhereCondition("c.id","p.country_id","=")
                 .addGroupBy("c.country_name").addOrderBy("c.country_name", "DESC");
@@ -11,7 +20,7 @@ public class Test {
         System.out.println();
 
         Query query2 = new Query().addColumn("*")
-                .addTable(new Query().addColumn("a").addTable("t").addWhereCondition("a","10","<").generate(),"tx",true)
+                .addTable(new Query().addColumn("a").addTable("t").addWhereCondition("a","10","<").generate(),false,"tx",true)
                 .addWhereCondition("tx.a","10",">");
 
         //select * from (select a from t where a < 10) tx where tx.a > 10
@@ -40,9 +49,29 @@ public class Test {
 
         System.out.println(query4.generate());
         System.out.println();
+
+        Scanner input=new Scanner(System.in);
+        int distribute = 0;
+        while(true){
+            System.out.println();
+            System.out.println("type if you want to test it as a distribute data base or MySQL:");
+            System.out.println("1 means distribute data base, 2 means only generate SQL for MySQL, 3 to exit");
+            distribute = input.nextInt();
+
+            if(distribute==1){
+                Query queryUser = new Query();
+                queryUser = CreateQuery.createQuery(queryUser);
+                Executor executor = new Executor();
+                System.out.println(executor.selectExecutor(queryUser));
+            }else if(distribute==2){
+                Query queryUser = new Query();
+                queryUser = CreateQuery.createQuery(queryUser);
+                System.out.println(queryUser.generate());
+            }else{
+                System.out.println("Incorrect input");
+            }
+        }
+
     }
-
-
-
 
 }

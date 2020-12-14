@@ -17,7 +17,7 @@ public class Query {
     private List<Condition> whereConditions;
     private Group group;
     private List<Order> orderBy;
-    private int limit;
+    private Limit limit;
 
     private static final String NEW_LINE = System.getProperty("line.separator");
 
@@ -30,7 +30,7 @@ public class Query {
         this.whereConditions = new ArrayList();
         this.group = new Group();
         this.orderBy = new ArrayList();
-        this.limit = -1;
+        this.limit = new Limit(-1,-1);
         this.sql = "";
 
     }
@@ -54,31 +54,52 @@ public class Query {
     }
 
     public Query addColumn(String columnName, boolean as, String columnCode){
+        if(as){
+            if(columnCode == null || columnCode.equals("")){
+                throw new IllegalArgumentException("empty columnCode");
+            }
+        }
         Column column = new Column(columnName, as, columnCode);
         columns.add(column);
         return this;
     }
 
-    public Query addTable(String tableName, String tableCode, boolean isGeneratedBySQL){
-        Table table = new Table(tableName,tableCode,isGeneratedBySQL);
+    public Query addTable(String tableName,boolean as, String tableCode, boolean isGeneratedBySQL){
+        if(as){
+            if(tableCode == null || tableCode.equals("")){
+                throw new IllegalArgumentException("empty tableCode");
+            }
+        }
+        Table table = new Table(tableName,as,tableCode,isGeneratedBySQL);
         tables.add(table);
         return this;
     }
 
     public Query addTable(String tableName, boolean isGeneratedBySQL){
-        Table table = new Table(tableName,null, isGeneratedBySQL);
+        Table table = new Table(tableName,false,null, isGeneratedBySQL);
         tables.add(table);
         return this;
     }
 
     public Query addTable(String tableName, String tableCode){
-        Table table = new Table(tableName,tableCode,false);
+        Table table = new Table(tableName,false,tableCode,false);
+        tables.add(table);
+        return this;
+    }
+
+    public Query addTable(String tableName,boolean as,String tableCode){
+        if(as){
+            if(tableCode == null || tableCode.equals("")){
+                throw new IllegalArgumentException("empty tableCode");
+            }
+        }
+        Table table = new Table(tableName,as,tableCode,false);
         tables.add(table);
         return this;
     }
 
     public Query addTable(String tableName){
-        Table table = new Table(tableName,null,false);
+        Table table = new Table(tableName,false,null,false);
         tables.add(table);
         return this;
     }
@@ -121,8 +142,11 @@ public class Query {
         return this;
     }
 
-    public Query addHaving(String aggregate,String colunName,String oprator,String comparator){
-        this.group.addHaving(aggregate,colunName,oprator,comparator);
+    public Query addHaving(String aggregate,String columnName,String oprator,String comparator){
+        if(!checkAggregate(aggregate)){
+            throw new IllegalArgumentException("illegal aggregate");
+        }
+        this.group.addHaving(aggregate,columnName,oprator,comparator);
         return this;
     }
 
@@ -141,8 +165,13 @@ public class Query {
         return this;
     }
 
-    public Query setLimit(int limit) {
-        this.limit = limit;
+    public Query setLimit(int offset,int size) {
+        this.limit = new Limit(offset,size);
+        return this;
+    }
+
+    public Query setLimit(int size) {
+        this.limit = new Limit(0,size);
         return this;
     }
 
@@ -211,9 +240,13 @@ public class Query {
         }
 
         // Add limit if user set a limitation > 0.
-        if(this.limit>0){
+        if(this.limit.getSize()>0){
             stringBuilder.append(NEW_LINE);
-            stringBuilder.append("LIMIT " + this.limit);
+            stringBuilder.append("LIMIT ");
+            if(this.limit.getOffset()>0){
+                stringBuilder.append(this.limit.getOffset()+",");
+            }
+            stringBuilder.append(this.limit.getSize());
         }
 
         this.sql = stringBuilder.toString();
@@ -262,7 +295,8 @@ public class Query {
         StringBuilder stringBuilder = new StringBuilder();
         String separator = " ";
         for(int i = 0;i<list.size();i++){
-            stringBuilder.append(" " + list.get(i).getJoinType() + " ");
+            stringBuilder.append(NEW_LINE);
+            stringBuilder.append(list.get(i).getJoinType() + " ");
             stringBuilder.append(list.get(i).getTable().getTableName());
             if(list.get(i).getTable().getTableCode()!=null){
                 stringBuilder.append(" ");
@@ -325,7 +359,7 @@ public class Query {
             stringBuilder.append("HAVING ");
             for(int i = 0;i<this.group.getHavings().size();i++){
                 stringBuilder.append(havingPrinter(group.getHavings().get(i)));
-                if(i!=group.getColumns().size()-1){
+                if(i!=group.getHavings().size()-1){
                     stringBuilder.append(" AND ");
                 }
             }
@@ -342,7 +376,7 @@ public class Query {
         for(int i = 0;i<list.size();i++){
             stringBuilder.append(list.get(i).getOrderName());
             if(list.get(i).getOrderType()!=null){
-                stringBuilder.append(" " + list.get(i).getOrderType().toString());
+                stringBuilder.append(" " + list.get(i).getOrderType());
             }
             if(i!=list.size()-1){
                 stringBuilder.append(separator);
@@ -355,11 +389,17 @@ public class Query {
         StringBuilder stringBuilder = new StringBuilder();
         if(table.getGeneratedBySQL()){
             stringBuilder.append("(" + table.getTableName().replace(NEW_LINE,"") + ") ");
+            if(table.isAs()){
+                stringBuilder.append("AS ");
+            }
             stringBuilder.append(table.getTableCode());
         }else{
             stringBuilder.append(table.getTableName());
             if(table.getTableCode()!=null){
                 stringBuilder.append(" ");
+                if(table.isAs()){
+                    stringBuilder.append("AS ");
+                }
                 stringBuilder.append(table.getTableCode());
             }
         }
@@ -390,7 +430,7 @@ public class Query {
     private boolean checkJoinType(String joinType){
         if(joinType.toUpperCase().equals("JOIN") || joinType.toUpperCase().equals("INNER JOIN") || joinType.toUpperCase().equals("LEFT JOIN")
         || joinType.toUpperCase().equals("RIGHT JOIN") || joinType.toUpperCase().equals("LEFT OUTER JOIN") || joinType.toUpperCase().equals("RIGHT OUTER JOIN")
-        || joinType.toUpperCase().equals("FULL JOIN") || joinType.toUpperCase().equals("FULL OUTER JOIN")){
+        || joinType.toUpperCase().equals("FULL JOIN") || joinType.toUpperCase().equals("FULL OUTER JOIN") || joinType.toUpperCase().equals("CROSS JOIN")){
             return true;
         }
         return false;
@@ -404,5 +444,52 @@ public class Query {
             return true;
         }
         return false;
+    }
+
+    /*
+     Check the aggregate user type is legal or illegal
+     */
+    private boolean checkAggregate(String aggregate){
+        if(aggregate.toUpperCase().equals("COUNT") || aggregate.toUpperCase().equals("SUM") || aggregate.toUpperCase().equals("AVG")
+                || aggregate.toUpperCase().equals("MIN") || aggregate.toUpperCase().equals("MAX")){
+            return true;
+        }
+        return false;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public boolean isDistinct() {
+        return distinct;
+    }
+
+    public List<Column> getColumns() {
+        return columns;
+    }
+
+    public List<Table> getTables() {
+        return tables;
+    }
+
+    public List<Join> getJoins() {
+        return joins;
+    }
+
+    public List<Condition> getWhereConditions() {
+        return whereConditions;
+    }
+
+    public Group getGroup() {
+        return group;
+    }
+
+    public List<Order> getOrderBy() {
+        return orderBy;
+    }
+
+    public Limit getLimit() {
+        return limit;
     }
 }
