@@ -2,7 +2,7 @@
 
 开始时间 | 北京时间：2020 年 12 月 9 日，
 
-截止时间 | 北京时间：2019 年 12 月 16 日，
+截止时间 | 北京时间：2019 年 12 月 15 日，
 
 
 题目:
@@ -101,14 +101,14 @@ Query类还有一些校验的方法，例如校验JoinType，OrderType是否书�
 因此需要对涉及到多表的SQL查询语句进行处理。同时因为之前博客中的提到的为了减少RPC调用（RPC调用，网络传播，IO会导致大量的开销），
 避免无意义的网络传输，所以要将计算尽量靠近节点，将Filter，聚合函数，Group By下推。这不仅更高效，在实现上也更简单。
 
-RPC类，意为实现远程调用针对单表的SQL语句的功能，其主要的方法为rpc()，旨在执行request返回Result。
+[RPC](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Distribute/RPC.java)类，意为实现远程调用针对单表的SQL语句的功能，其主要的方法为rpc()，旨在执行request返回Result。
 
-Result类，代表针对单表执行以此SQL语句后的结果集，在本项目中对单表执行一次的结果集由 < Execute (SQL查询语句) >表示。
+[Result](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Distribute/Result.java)类，代表针对单表执行以此SQL语句后的结果集，在本项目中对单表执行一次的结果集由 < Execute (SQL查询语句) >表示。
 
-Select类，保存由上层传来的一条完整的查询语句（没有针对多表进行处理，一开始由查询语句生成器直接生成的），并且还保存这条语句是否针对多表，
+[Select](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Distribute/Select.java)类，保存由上层传来的一条完整的查询语句（没有针对多表进行处理，一开始由查询语句生成器直接生成的），并且还保存这条语句是否针对多表，
 如果是，保存被划分为针对每一个表的语句。Select类完成调用RPC的操作。
 
-Executor类，意为执行SQL查询语句。里面主要分为两个部分，一个是根据传进的Query类，判断其是针对单表还是多表，然后生成对应的Request，进行执行。
+[Executor](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Distribute/Executor.java)类，意为执行SQL查询语句。里面主要分为两个部分，一个是根据传进的Query类，判断其是针对单表还是多表，然后生成对应的Request，进行执行。
 另一部分是如果Query类对应的是一个针对多表的查询语句，那么进行查询语句的拆分，生成子Query，并生成多个Request类。
 
 这里在实现时做了一定的假设：
@@ -148,20 +148,28 @@ Execute意为针对子语句进行查询，Result Union意为针对子结果进�
 #### 测试结果
 第一部分（提前设定）：
 
-该部分由test.test中的GenerateTest实现，预先设定了题目中出现的SQL语句，自编的SQL查询语句，及有错误输入的SQL语句。
+该部分由test.test中的[GenerateTest](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/test/test/GenerateTest.java)实现，预先设定了题目中出现的SQL语句，自编的SQL查询语句，及有错误输入的SQL语句。
 
 自编的SQL查询语句前三条是基于表t，给三列赋予一定的属性产生的查询语句，另外一条是基于TPCH改编的查询语句。
 
+针对具体的SQL 查询语句的生成可以在[GenerateTest](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/test/test/GenerateTest.java)中找到。
+
+测试结果：
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C.png)
+
+题目中的例子：
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E9%A2%98%E7%9B%AE%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5.png)
 
+自编SQL查询语句：
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E5%85%B6%E4%BB%96%E8%BE%93%E5%85%A5.png)
 
+有错误输入：
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E9%94%99%E8%AF%AF%E8%BE%93%E5%85%A5.png)
 
 
 第二部分（终端输入）：
 
-该部分由test.test中的TerminalTest实现，可以在终端选择模式并输入条件生成想生成的SQL查询语句。
+该部分由test.test中的[TerminalTest](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/test/test/TerminalTest.java)实现，可以在终端选择模式并输入条件生成想生成的SQL查询语句。
 
 手动输入时请参照说明及用例。
 
