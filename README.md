@@ -132,7 +132,7 @@ With the oringinal sql is (SELECT a.id, b.code, c.name FROM t a, t b cross join 
 ```
 
 Execute意为针对子语句进行查询，Result Union意为针对子结果进行Join的实现，其实现原理可以与
-[TiDB源码阅读系列文章](https://pingcap.com/blog-cn/tidb-source-code-reading-9/) 提到的相符，但本项目没有涉及。最后附上原查询语句。
+[TiDB源码阅读系列文章](https://pingcap.com/blog-cn/tidb-source-code-reading-9/) 提到的相符，但本项目没有涉及，最后附上原查询语句。
 
 
 ### 实际测试
@@ -148,31 +148,41 @@ Execute意为针对子语句进行查询，Result Union意为针对子结果进�
 #### 测试结果
 第一部分（提前设定）：
 
+该部分由test.test中的GenerateTest实现，预先设定了题目中出现的SQL语句，自编的SQL查询语句，及有错误输入的SQL语句。
+
+自编的SQL查询语句前三条是基于表t，给三列赋予一定的属性产生的查询语句，另外一条是基于TPCH改编的查询语句。
+
+![image](https://github.com/xxx/xx.png)
+
+![image](https://github.com/xxx/xx.png)
+
 
 第二部分（终端输入）：
 
+该部分由test.test中的TerminalTest实现，可以在终端选择模式并输入条件生成想生成的SQL查询语句。
 
+手动输入时请参照说明及用例。
 
+![image](https://github.com/xxx/xx.png)
 
-### 使用指南
+![image](https://github.com/xxx/xx.png)
 
-#### 下载仓库到本地
-```
+终端输入生成类分布式 SQL查询语句
 
-```
-#### 进入项目文件夹
-```
+![image](https://github.com/xxx/xx.png)
 
-```
-#### 运行程序
-```
+![image](https://github.com/xxx/xx.png)
 
-```
-#### 运行测试
-```
+### 说明
+1. 设计中的子句只包含了SELECT，FROM，JOIN（JOIN，CROSS JOIN，INNER JOIN，LEFT JOIN，RIGHT JOIN），ON，USING，WHERE，
+GROUP BY，HAVING，ORDER BY，LIMIT，及五个聚合函数（COUNT，AVG，SUM，MIN，MAX）其余的子句类似BETWEEN，EXIST,IN暂无涉及。
+2. 生成的SQL查询语句除了Join type，order type，聚合函数因为人为输入可能为小写，其余子句自动生成为大写。
+3. 设计中，默认每一个join对应的on只有一组，主要原因是为了在终端输入时更好表达。
+4. 测试中，终端输入暂不支持子查询，因为会导致输入时过于繁琐。生成带有子查询的SQL语句在查询的第一部分有被涵盖。
 
-```
 
 
 ## 参考资料
+[三篇文章了解TiDB技术内幕-说计算](https://pingcap.com/blog-cn/tidb-internal-2/)
 [TiDB源码阅读系列文章](https://pingcap.com/blog-cn/tidb-source-code-reading-9/)
+[TPC-H query plan](http://www.qdpma.com/tpch/TPCH100_Query_plans.html)
