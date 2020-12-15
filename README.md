@@ -65,21 +65,21 @@ CREATE TABLE t (
 项目中为除SELECT，FROM之外的所有模块创建了独自的类，Column（列名），Condition（WHERE语句的条件），Group（GROUP BY），Having（HAVING），
 Join（各种类型Join），Limit（Limit），On（Join后面的On语句），Order（ORDER BY），Table（FROM后跟的表名）。
 
-Column 和 Table主要包含属性：本身的列名（表名），是否使用AS，别名。后两者可以为空。
+[Column](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Column.java) 和 [Table](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Table.java)：本身的列名（表名），是否使用AS，别名。后两者可以为空。
 
-Condition 主要包含三个字符串类型，分别表示操作符前的条件，操作符，操作符后的条件。
+[Condition](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Condition.java) 主要包含三个字符串类型，分别表示操作符前的条件，操作符，操作符后的条件。
 
-Group内为两个List，List<Column> 和 List<Having>, 表示group by的组，以及可能有的聚合的条件。
+[Group](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Group.java)内为两个List，List<Column> 和 List<Having>, 表示group by的组，以及可能有的聚合的条件。
 
-Having 内包含四个字符串类型，aggregate（聚合函数名），column（列名），operator（操作符），comparator（操作符后跟的数）。
+[Having](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Having.java) 内包含四个字符串类型，aggregate（聚合函数名），column（列名），operator（操作符），comparator（操作符后跟的数）。
 
-Join 包含joinType，table（表名），on（是否使用on语句，及on的条件，本质上on与condition相同），using（是否使用using，using和on只能2选1）。
+[Limit](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Limit.java) 包含joinType，table（表名），on（是否使用on语句，及on的条件，本质上on与condition相同），using（是否使用using，using和on只能2选1）。
 
-Limit 包含offset，size。offset如果没设置默认为0。
+[Order](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Order.java) 包含offset，size。offset如果没设置默认为0。
 
 Order orderName及orderType，分表表示根据哪一列进行排序以及排序的类型（默认为ASC）。
 
-#### Query主体结构
+#### [Query类](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/Generator/Query.java)主体结构
 SQL查询语句的生成主要在Query类中生成，一个Query就对应一条完整的查询语句。Query中根据SELECT，FROM，WHERE，GROUP BY，HAVING，ORDER BY，LIMIT
 对每一个小模块进行实现，并且具有添加各个模块内的条件的方法。其中列名，表名，JOIN，WHERE Condition，Order为List，可以储存多个该类的条件。
 
@@ -155,15 +155,19 @@ Execute意为针对子语句进行查询，Result Union意为针对子结果进�
 针对具体的SQL 查询语句的生成可以在[GenerateTest](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/src/test/test/GenerateTest.java)中找到。
 
 测试结果：
+
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E6%B5%8B%E8%AF%95%E7%BB%93%E6%9E%9C.png)
 
 题目中的例子：
+
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E9%A2%98%E7%9B%AE%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5.png)
 
 自编SQL查询语句：
+
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E5%85%B6%E4%BB%96%E8%BE%93%E5%85%A5.png)
 
 有错误输入：
+
 ![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E9%94%99%E8%AF%AF%E8%BE%93%E5%85%A5.png)
 
 
