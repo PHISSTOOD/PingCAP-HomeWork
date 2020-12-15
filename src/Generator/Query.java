@@ -114,12 +114,18 @@ public class Query {
     }
 
     public Query addJoin(String joinType,String tableName, String tableCode,String using){
+        if(!checkJoinType(joinType)){
+            throw new IllegalArgumentException("illegal join type");
+        }
         Join join = new Join(joinType,tableName,tableCode,using);
         this.joins.add(join);
         return this;
     }
 
     public Query addJoin(String joinType,String tableName, String tableCode ){
+        if(!checkJoinType(joinType)){
+            throw new IllegalArgumentException("illegal join type");
+        }
         Join join = new Join(joinType, tableName,tableCode, (String)null);
         this.joins.add(join);
         return this;
@@ -181,7 +187,7 @@ public class Query {
      SELECT -> FROM -> (WHERE) -> (GROUP BY) -> (HAVING) -> (ORDER BY) those clauses in () means they are unnecessary.
      The sequence of the implementation of generating is accord with this sequence.
      */
-    public String generate(){
+    public String generate() throws  IllegalArgumentException{
         StringBuilder stringBuilder = new StringBuilder();
 
         // Add SELECT at the beginning of sql, and add DISTINCT if it has been set.
@@ -218,9 +224,6 @@ public class Query {
             stringBuilder.append(NEW_LINE);
             stringBuilder.append("WHERE ");
             stringBuilder.append(conditionStatement);
-        }else{
-            stringBuilder.append(NEW_LINE);
-            stringBuilder.append("WHERE 1 = 1");
         }
 
         // Add GROUP BY and HAVING
@@ -244,7 +247,7 @@ public class Query {
             stringBuilder.append(NEW_LINE);
             stringBuilder.append("LIMIT ");
             if(this.limit.getOffset()>0){
-                stringBuilder.append(this.limit.getOffset()+",");
+                stringBuilder.append(this.limit.getOffset()+", ");
             }
             stringBuilder.append(this.limit.getSize());
         }
@@ -306,9 +309,6 @@ public class Query {
                 stringBuilder.append(onPrinter(list.get(i).getOn()));
             }else if(list.get(i).getUsing()!=null){
                 stringBuilder.append(" USING " + list.get(i).getUsing());
-            }
-            if(i!=list.size()-1){
-                stringBuilder.append(separator);
             }
         }
         return stringBuilder.toString();
@@ -388,7 +388,7 @@ public class Query {
     private String tablePrinter(Table table){
         StringBuilder stringBuilder = new StringBuilder();
         if(table.getGeneratedBySQL()){
-            stringBuilder.append("(" + table.getTableName().replace(NEW_LINE,"") + ") ");
+            stringBuilder.append("(" + table.getTableName().replace(NEW_LINE," ") + ") ");
             if(table.isAs()){
                 stringBuilder.append("AS ");
             }
@@ -419,7 +419,7 @@ public class Query {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(having.getAggregate());
         stringBuilder.append("(" + having.getColumn() + ")");
-        stringBuilder.append(having.getOprator());
+        stringBuilder.append(" " + having.getOprator() + " ");
         stringBuilder.append(having.getComparator());
         return stringBuilder.toString();
     }
