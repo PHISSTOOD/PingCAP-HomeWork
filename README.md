@@ -186,5 +186,7 @@ GROUP BY，HAVING，ORDER BY，LIMIT，及五个聚合函数（COUNT，AVG，SUM
 
 ## 参考资料
 [三篇文章了解TiDB技术内幕-说计算](https://pingcap.com/blog-cn/tidb-internal-2/)
+
 [TiDB源码阅读系列文章](https://pingcap.com/blog-cn/tidb-source-code-reading-9/)
+
 [TPC-H query plan](http://www.qdpma.com/tpch/TPCH100_Query_plans.html)
