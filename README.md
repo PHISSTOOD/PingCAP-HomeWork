@@ -152,9 +152,11 @@ Execute意为针对子语句进行查询，Result Union意为针对子结果进�
 
 自编的SQL查询语句前三条是基于表t，给三列赋予一定的属性产生的查询语句，另外一条是基于TPCH改编的查询语句。
 
-![image](https://github.com/xxx/xx.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E9%A2%98%E7%9B%AE%E4%B8%AD%E7%9A%84%E8%BE%93%E5%85%A5.png)
 
-![image](https://github.com/xxx/xx.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E5%85%B6%E4%BB%96%E8%BE%93%E5%85%A5.png)
+
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E9%94%99%E8%AF%AF%E8%BE%93%E5%85%A5.png)
 
 
 第二部分（终端输入）：
@@ -163,15 +165,15 @@ Execute意为针对子语句进行查询，Result Union意为针对子结果进�
 
 手动输入时请参照说明及用例。
 
-![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%201.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%201.png)
 
-![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%202.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%202.png)
 
 终端输入生成类分布式 SQL查询语句
 
-![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%891.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%891.png)
 
-![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%892.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Images/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%892.png)
 
 ### 说明
 1. 设计中的子句只包含了SELECT，FROM，JOIN（JOIN，CROSS JOIN，INNER JOIN，LEFT JOIN，RIGHT JOIN），ON，USING，WHERE，
