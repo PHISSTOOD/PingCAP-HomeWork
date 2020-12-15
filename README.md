@@ -163,15 +163,15 @@ Execute意为针对子语句进行查询，Result Union意为针对子结果进�
 
 手动输入时请参照说明及用例。
 
-![image](https://github.com/xxx/xx.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%201.png)
 
-![image](https://github.com/xxx/xx.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%202.png)
 
 终端输入生成类分布式 SQL查询语句
 
-![image](https://github.com/xxx/xx.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%891.png)
 
-![image](https://github.com/xxx/xx.png)
+![image](https://github.com/PHISSTOOD/PingCAP-HomeWork/blob/main/Image/%E6%89%8B%E5%8A%A8%E8%BE%93%E5%85%A5SQL%EF%BC%88%E5%88%86%E5%B8%83%E5%BC%8F%EF%BC%892.png)
 
 ### 说明
 1. 设计中的子句只包含了SELECT，FROM，JOIN（JOIN，CROSS JOIN，INNER JOIN，LEFT JOIN，RIGHT JOIN），ON，USING，WHERE，
